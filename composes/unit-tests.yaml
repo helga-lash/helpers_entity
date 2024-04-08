@@ -1,0 +1,14 @@
+services:
+  helpers:
+    build:
+      # noinspection ComposeUnknownKeys
+      target: unit-tests
+    environment:
+      REPORT_TESTER_NAME: Mikhail Fomenko
+      HPE_VERS: v0.1.0
+    volumes:
+      - ./tests/reports:/reports
+
+networks:
+  default:
+    name: helpers-unit-tests

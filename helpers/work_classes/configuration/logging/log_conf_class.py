@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json, config
 from typing import Optional
-from pathlib import Path, PosixPath
+from pathlib import Path
 
 from helpers.work_classes.configuration.logging.enum_classes import LogLevel, LogFormat, LogOutput
 
@@ -26,5 +26,5 @@ class LogConf:
                                                                    decoder=lambda x: LogLevel[x]))
     format: LogFormat = field(default=LogFormat.string, metadata=config(encoder=lambda x: x.value, decoder=LogFormat))
     output: LogOutput = field(default=LogOutput.stream, metadata=config(encoder=lambda x: x.value, decoder=LogOutput))
-    path: Optional[PosixPath] = field(default=Path('/log/app.log'),
-                                      metadata=config(encoder=str, decoder=lambda x: Path(x)))
+    path: Optional[Path] = field(default=Path('/log/app.log'),
+                                 metadata=config(encoder=str, decoder=lambda x: Path(x)))

@@ -32,33 +32,35 @@ def pg_conf(path: PosixPath = None) -> ReturnEntity:
         logger.debug("Database configuration not set in config file")
         pg_dict: dict = dict({'rw': {}, 'ro': {}})
 
-    if os.environ.get('DB_NAME') is not None:
-        logger.debug("The database name is set from the environment variable")
-        pg_dict.update(name=str(os.environ.get('DB_NAME')))
-    if os.environ.get('DB_RW_HOST') is not None:
-        logger.debug("The database host for writing data is set from an environment variable")
-        pg_dict['rw'].update(host=str(os.environ.get('DB_RW_HOST')))
-    if os.environ.get('DB_RW_PORT') is not None:
-        logger.debug("The database port for writing data is set from an environment variable")
-        pg_dict['rw'].update(port=int(os.environ.get('DB_RW_PORT')))
-    if os.environ.get('DB_RW_USER') is not None:
-        logger.debug("The database user for writing data is set from an environment variable")
-        pg_dict['rw'].update(user=str(os.environ.get('DB_RW_USER')))
-    if os.environ.get('DB_RW_PAS') is not None:
-        logger.debug("The database password for writing data is set from an environment variable")
-        pg_dict['rw'].update(password=str(os.environ.get('DB_RW_PAS')))
-    if os.environ.get('DB_RO_HOST') is not None:
-        logger.debug("The database host for reading data is set from an environment variable")
-        pg_dict['ro'].update(host=str(os.environ.get('DB_RO_HOST')))
-    if os.environ.get('DB_RO_PORT') is not None:
-        logger.debug("The database port for reading data is set from an environment variable")
-        pg_dict['ro'].update(port=int(os.environ.get('DB_RO_PORT')))
-    if os.environ.get('DB_RO_USER') is not None:
-        logger.debug("The database user for reading data is set from an environment variable")
-        pg_dict['ro'].update(user=str(os.environ.get('DB_RO_USER')))
-    if os.environ.get('DB_RO_PAS') is not None:
-        logger.debug("The database password for reading data is set from an environment variable")
-        pg_dict['ro'].update(password=str(os.environ.get('DB_RO_PAS')))
+    for key, value in os.environ.items():
+        match key:
+            case 'DB_NAME':
+                logger.debug("The database name is set from the environment variable")
+                pg_dict.update(name=str(value))
+            case 'DB_RW_HOST':
+                logger.debug("The database host for writing data is set from an environment variable")
+                pg_dict['rw'].update(host=str(value))
+            case 'DB_RW_PORT':
+                logger.debug("The database port for writing data is set from an environment variable")
+                pg_dict['rw'].update(port=int(value))
+            case 'DB_RW_USER':
+                logger.debug("The database user for writing data is set from an environment variable")
+                pg_dict['rw'].update(user=str(value))
+            case 'DB_RW_PAS':
+                logger.debug("The database password for writing data is set from an environment variable")
+                pg_dict['rw'].update(password=str(value))
+            case 'DB_RO_HOST':
+                logger.debug("The database host for reading data is set from an environment variable")
+                pg_dict['ro'].update(host=str(value))
+            case 'DB_RO_PORT':
+                logger.debug("The database port for reading data is set from an environment variable")
+                pg_dict['ro'].update(port=int(value))
+            case 'DB_RO_USER':
+                logger.debug("The database user for reading data is set from an environment variable")
+                pg_dict['ro'].update(user=str(value))
+            case 'DB_RO_PAS':
+                logger.debug("The database password for reading data is set from an environment variable")
+                pg_dict['ro'].update(password=str(value))
 
     result: ReturnEntity = ReturnEntity(False)
     if pg_dict.get('name') is None:
