@@ -1,12 +1,12 @@
 import os
 
-from pathlib import PosixPath
+from pathlib import Path
 
 from helpers.work_classes import LogConf, ReturnEntity
 from helpers.configuration.yaml_conf_file import read_yaml_conf
 
 
-def log_conf(path: PosixPath = None) -> ReturnEntity:
+def log_conf(path: Path = None) -> ReturnEntity:
     """
     Method validating logging configuration
     :param path: path to configuration file
@@ -48,6 +48,9 @@ def log_conf(path: PosixPath = None) -> ReturnEntity:
             case 'c' | 'crt' | 'crit' | 'critical' | '50':
                 result.entity.update(level='critical')
             case _:
+                result.error = True
+                result.error_text_append('The specified logging level is not registered. The default logging level is '
+                                         'set: info')
                 result.entity.pop('level')
 
     if result.entity.get('format') is not None:
@@ -57,6 +60,9 @@ def log_conf(path: PosixPath = None) -> ReturnEntity:
             case 'string' | 'str' | 'st' | 's':
                 result.entity.update(format='string')
             case _:
+                result.error = True
+                result.error_text_append('The specified logging format is not registered. The default logging format is'
+                                         ' set: string')
                 result.entity.pop('format')
 
     if result.entity.get('output') is not None:
@@ -66,6 +72,9 @@ def log_conf(path: PosixPath = None) -> ReturnEntity:
             case 'file' | 'fl' | 'f':
                 result.entity.update(output='file')
             case _:
+                result.error = True
+                result.error_text_append('The specified logging output is not registered. The default logging output is'
+                                         ' set: stream')
                 result.entity.pop('output')
 
     match result.entity.get('output'):
@@ -78,6 +87,10 @@ def log_conf(path: PosixPath = None) -> ReturnEntity:
                 result.entity.pop('path')
                 if os.path.exists(log_path):
                     result.entity.update(path=log_file_path)
+                else:
+                    result.error = True
+                    result.error_text_append('The specified logging path is not exists. The default logging path is'
+                                             ' set: /log/app.log')
         case _:
             result.entity.pop('path', None)
 

@@ -32,6 +32,8 @@ class ReadYamlConfTests(IsolatedAsyncioTestCase):
 
     async def test_read(self):
         result: ReturnEntity = read_yaml_conf()
+        if result.error:
+            print(result.errorText)
         self.assertFalse(result.error)
         print(json.dumps(result.entity, indent=4, sort_keys=True))
         self.assertEqual(None, result.errorText)
