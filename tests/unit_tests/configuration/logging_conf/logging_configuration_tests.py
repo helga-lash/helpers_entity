@@ -10,21 +10,27 @@ from helpers.work_classes import ReturnEntity
 from helpers.work_classes import LogLevel, LogOutput, LogFormat
 
 
+conf_path = Path('/conf/logging-test.yaml')
+
+
 class LogConfTests(IsolatedAsyncioTestCase):
     """
     Class describing tests for helpers.configuration.logging_conf.log_conf
     """
+
+    async def asyncSetUp(self):
+        with open(conf_path, 'w') as file:
+            file.write('logging:\n  level: critical\n  format: json\n  output: file\n  path: /log/test.log')
 
     async def asyncTearDown(self):
         os.environ.pop('LOG_LVL', None)
         os.environ.pop('LOG_FMT', None)
         os.environ.pop('LOG_OUT', None)
         os.environ.pop('LOG_PTH', None)
+        os.remove(conf_path)
 
     async def test_read_from_file(self):
-        with open(Path('/conf/example-test.yaml'), 'w') as file:
-            file.write('logging:\n  level: critical\n  format: json\n  output: file\n  path: /log/test.log')
-        result: ReturnEntity = log_conf(Path('/conf/example-test.yaml'))
+        result: ReturnEntity = log_conf(conf_path)
         if result.error:
             print(result.errorText)
         self.assertFalse(result.error)
@@ -47,13 +53,11 @@ class LogConfTests(IsolatedAsyncioTestCase):
         self.assertEqual('/log/app.log', str(result.entity.path))
 
     async def test_env_var(self):
-        with open(Path('/conf/example-test.yaml'), 'w') as file:
-            file.write('logging:\n  level: critical\n  format: json\n  output: stream')
         os.environ['LOG_LVL'] = 'debug'
         os.environ['LOG_FMT'] = 'string'
         os.environ['LOG_OUT'] = 'file'
         os.environ['LOG_PTH'] = '/log/test-env.log'
-        result: ReturnEntity = log_conf(Path('/conf/example-test.yaml'))
+        result: ReturnEntity = log_conf(conf_path)
         if result.error:
             print(result.errorText)
         self.assertFalse(result.error)

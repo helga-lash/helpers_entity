@@ -8,7 +8,7 @@ Helper entities for other applications
   ```
 * Для остановки выполнить команду из директории с проектом:
   ```shell
-  docker compose -f docker-compose.yaml -f composes/unit-tests.yaml down --rmi local -v
+  docker compose -f docker-compose.yaml -f composes/unit-tests.yaml down --rmi local -v; sudo rm -f tests/reports/unit-tests.log
   ```
 [Отчет](./tests/reports/unit-tests.html)
 

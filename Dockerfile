@@ -8,8 +8,8 @@ COPY configuration-example.yaml /conf/example.yaml
 
 FROM base as unit-tests
 COPY requirements/unit-tests.txt /requirements/unit-tests.txt
+RUN pip install -r /requirements/unit-tests.txt
 COPY tests/unit_tests /app/unit_tests
 COPY tests/utests.py /app/utests.py
 WORKDIR /app
-RUN pip install -r /requirements/unit-tests.txt
 ENTRYPOINT ["python3", "/app/utests.py"]
