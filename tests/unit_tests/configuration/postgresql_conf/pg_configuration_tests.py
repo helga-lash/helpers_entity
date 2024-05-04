@@ -10,16 +10,14 @@ from helpers.work_classes import ReturnEntity
 from helpers.work_classes import PgConf
 
 
-conf_path = Path('/conf/pg-test.yaml')
-
-
 class PgConfTests(IsolatedAsyncioTestCase):
     """
     Class describing tests for helpers.configuration.postgresql_conf.pg_conf
     """
 
     async def asyncSetUp(self):
-        with open(conf_path, 'w') as file:
+        self.conf_path = Path('/conf/pg-test.yaml')
+        with open(self.conf_path, 'w') as file:
             file.write('database:\n'
                        '  name: pg_test_db\n'
                        '  rw:\n'
@@ -43,10 +41,10 @@ class PgConfTests(IsolatedAsyncioTestCase):
         os.environ.pop('DB_RO_PORT', None)
         os.environ.pop('DB_RO_USER', None)
         os.environ.pop('DB_RO_PAS', None)
-        os.remove(conf_path)
+        os.remove(self.conf_path)
 
     async def test_read_from_file(self):
-        result: ReturnEntity = pg_conf(conf_path)
+        result: ReturnEntity = pg_conf(self.conf_path)
         if result.error:
             for error in result.errorText.split('|'):
                 print(error)
@@ -89,7 +87,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
         os.environ['DB_RO_PORT'] = '654322'
         os.environ['DB_RO_USER'] = 'test_env_var_ro_user'
         os.environ['DB_RO_PAS'] = 'test_env_var_ro_password'
-        result: ReturnEntity = pg_conf(conf_path)
+        result: ReturnEntity = pg_conf(self.conf_path)
         if result.error:
             for error in result.errorText.split('|'):
                 print(error)
@@ -323,7 +321,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
 
     async def test_rw_port_negative_env(self):
         os.environ['DB_RW_PORT'] = '-5432'
-        result: ReturnEntity = pg_conf(conf_path)
+        result: ReturnEntity = pg_conf(self.conf_path)
         if result.error:
             for error in result.errorText.split('|'):
                 print(error)
@@ -333,7 +331,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
 
     async def test_ro_port_negative_env(self):
         os.environ['DB_RO_PORT'] = '-5433'
-        result: ReturnEntity = pg_conf(conf_path)
+        result: ReturnEntity = pg_conf(self.conf_path)
         if result.error:
             for error in result.errorText.split('|'):
                 print(error)
@@ -352,7 +350,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
 
     async def test_rw_port_float_env(self):
         os.environ['DB_RW_PORT'] = '5433.3268'
-        result: ReturnEntity = pg_conf(conf_path)
+        result: ReturnEntity = pg_conf(self.conf_path)
         if result.error:
             for error in result.errorText.split('|'):
                 print(error)
@@ -361,7 +359,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
 
     async def test_rw_port_boolean_env(self):
         os.environ['DB_RW_PORT'] = 'true'
-        result: ReturnEntity = pg_conf(conf_path)
+        result: ReturnEntity = pg_conf(self.conf_path)
         if result.error:
             for error in result.errorText.split('|'):
                 print(error)
@@ -370,7 +368,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
 
     async def test_ro_port_float_env(self):
         os.environ['DB_RO_PORT'] = '5465.33'
-        result: ReturnEntity = pg_conf(conf_path)
+        result: ReturnEntity = pg_conf(self.conf_path)
         if result.error:
             for error in result.errorText.split('|'):
                 print(error)
@@ -389,7 +387,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
 
     async def test_ro_port_boolean_env(self):
         os.environ['DB_RO_PORT'] = 'false'
-        result: ReturnEntity = pg_conf(conf_path)
+        result: ReturnEntity = pg_conf(self.conf_path)
         if result.error:
             for error in result.errorText.split('|'):
                 print(error)

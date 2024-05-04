@@ -1,7 +1,7 @@
 import os
 
 from helpers.configuration import logger
-from helpers.work_classes.configuration.app.telegram_bot import TgBotConf
+from helpers.work_classes.configuration import TgBotConf
 from helpers.work_classes import ReturnEntity
 
 
@@ -38,3 +38,6 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
         result.entity = TgBotConf.from_dict(conf_dict)
 
     return result
+
+
+__all__ = 'tg_bot_conf'

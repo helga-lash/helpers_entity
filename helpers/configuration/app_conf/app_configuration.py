@@ -2,7 +2,7 @@ from pathlib import Path
 
 from helpers.configuration.yaml_conf_file import read_yaml_conf
 from helpers.configuration import logger
-from helpers.work_classes.configuration.app import AppConf
+from helpers.work_classes.configuration import AppConf
 from helpers.configuration.app_conf.tg_bot_conf import tg_bot_conf
 from helpers.work_classes import ReturnEntity
 
@@ -31,8 +31,11 @@ def app_conf(path: Path = None) -> ReturnEntity:
     else:
         result.entity.tgBot = tg_conf.entity
 
-    if len(result.entity) < 1:
+    if result.entity.tgBot is None:
         result.error = True
         logger.info(result.errorText)
 
     return result
+
+
+__all__ = 'app_conf'
