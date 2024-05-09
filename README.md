@@ -1,6 +1,22 @@
 # helpers_entity
 Helper entities for other applications
 
+## Содержит следующие сущности:
+### helpers.work_classes:
+* LogConf - класс описывающий конфигурацию логирования 
+* LogLevel - enum класс описывающий уровни логирования
+* LogFormat - enum класс описывающий формат логов
+* LogOutput - enum класс описывающий куда выводить логи
+* PgConf - класс описывающий конфигурацию подключения к БД PostgreSQL
+* TgBotConf - класс описывающий конфигурацию подключения к телеграм боту
+* AppConf - класс описывающий конфигурацию приложения
+* ReturnEntity - класс описывающий сущность возвращаемую функциями
+### helpers.configuration:
+* log_conf - функция возвращающая класс helpers.work_classes.LogConf
+* logger - сконфигурированный логер 
+* pg_conf - функция возвращающая класс helpers.work_classes.PgConf
+* app_conf - функция возвращающая класс helpers.work_classes.AppConf
+
 ## Unit tests:
 * Для запуска выполнить команду из директории с проектом:
   ```shell
