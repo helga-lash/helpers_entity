@@ -15,7 +15,10 @@ def app_conf(path: Path = None) -> ReturnEntity:
     """
     result: ReturnEntity = ReturnEntity(error=False, entity=AppConf())
 
-    config_data: ReturnEntity = read_yaml_conf(path)
+    if path is not None:
+        config_data: ReturnEntity = read_yaml_conf(path)
+    else:
+        config_data: ReturnEntity = read_yaml_conf()
 
     if (not config_data.error) and (config_data.entity.get('app') is not None):
         logger.debug("App configuration read from configuration file")
