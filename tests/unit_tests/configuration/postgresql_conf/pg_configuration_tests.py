@@ -425,8 +425,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
             for error in result.errorText.split('|'):
                 print(error)
         self.assertTrue(result.error)
-        self.assertIn('The database connection port for writing and reading cannot be less than 100',
-                      result.errorText)
+        self.assertIn('Port must be a positive integer', result.errorText)
 
     async def test_ro_port_negative_env(self):
         os.environ['DB_RO_PORT'] = '-5433'
@@ -523,8 +522,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
             for error in result.errorText.split('|'):
                 print(error)
         self.assertTrue(result.error)
-        self.assertIn('The database connection port for writing and reading cannot be less than 100',
-                      result.errorText)
+        self.assertIn('Port must be a positive integer', result.errorText)
 
     async def test_ro_port_negative_file(self):
         with open(Path('/conf/pg-negative-test.yaml'), 'w') as file:
@@ -600,7 +598,7 @@ class PgConfTests(IsolatedAsyncioTestCase):
             for error in result.errorText.split('|'):
                 print(error)
         self.assertTrue(result.error)
-        self.assertIn('The database connection port for writing and reading cannot be less than 100', result.errorText)
+        self.assertIn('Port must be a positive integer', result.errorText)
 
     async def test_ro_port_float_file(self):
         with open(Path('/conf/pg-negative-test.yaml'), 'w') as file:

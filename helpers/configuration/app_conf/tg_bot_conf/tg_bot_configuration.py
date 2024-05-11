@@ -5,6 +5,7 @@ from datetime import time
 from helpers.configuration import logger
 from helpers.work_classes.configuration import TgBotConf
 from helpers.work_classes import ReturnEntity
+from helpers.configuration.help_functions import positive_int_check
 
 
 def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
@@ -29,13 +30,16 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
             case 'TG_RD_TM':
                 logger.debug("The telegram recording time list is set from the environment variable")
                 conf_dict['recordTime'] = list()
-                for tm in str(os.environ.get('TG_RD_TM')).split(', '):
+                for tm in str(value).split(', '):
                     conf_dict['recordTime'].append(tm)
             case 'TG_ADMINS':
                 logger.debug("The telegram admins is set from the environment variable")
                 conf_dict['admins'] = list()
-                for admin in str(os.environ.get('TG_ADMINS')).split(', '):
+                for admin in str(value).split(', '):
                     conf_dict['admins'].append(admin)
+            case 'TG_RD_MT':
+                logger.debug("The telegram number of months is set from the environment variable")
+                conf_dict.update(recordMonth=str(value))
 
     if conf_dict.get('token') is None:
         result.error = True
@@ -54,6 +58,14 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
                 logger.debug(error)
                 result.error = True
                 result.error_text_append(f'Invalid time format ({item}).')
+
+    if conf_dict.get('recordMonth') is not None:
+        if positive_int_check(conf_dict['recordMonth']):
+            logger.debug('The telegram number of months a positive integer')
+            conf_dict.update(recordMonth=int(conf_dict['recordMonth']))
+        else:
+            logger.debug('The telegram number of months must be a positive integer. The default value will be used')
+            conf_dict.pop('recordMonth')
 
     if not result.error:
         result.entity = TgBotConf.from_dict(conf_dict)

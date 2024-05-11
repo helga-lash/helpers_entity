@@ -31,7 +31,8 @@ class AppConfTests(IsolatedAsyncioTestCase):
                        '      - test-admin-2\n'
                        '      - test-admin-3\n'
                        '      - test-admin-4\n'
-                       '      - test-admin-5\n')
+                       '      - test-admin-5\n'
+                       '    recordMonth: 12')
 
     async def asyncTearDown(self):
         os.remove(self.conf_path)
@@ -55,6 +56,7 @@ class AppConfTests(IsolatedAsyncioTestCase):
         self.assertIn('test-admin-3', result_entity.tgBot.admins)
         self.assertIn('test-admin-4', result_entity.tgBot.admins)
         self.assertIn('test-admin-5', result_entity.tgBot.admins)
+        self.assertEqual(12, result_entity.tgBot.recordMonth)
 
     async def test_not_conf_file_not_env(self):
         result: ReturnEntity = app_conf(Path('/conf/app-conf.yaml'))

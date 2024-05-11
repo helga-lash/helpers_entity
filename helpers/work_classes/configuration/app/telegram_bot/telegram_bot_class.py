@@ -17,7 +17,10 @@ class TgBotConf:
             Recording time list
         admins: list[str]
             (Optional) List of bot admin IDs
+        recordMonth: int
+            (Optional) Number of months available for recording. Default 2
     """
     token: str
     recordTime: list[time] = field(metadata=config(encoder=lambda x: [str(i) for i in x]))
     admins: Optional[list[str]] = None
+    recordMonth: int = 2

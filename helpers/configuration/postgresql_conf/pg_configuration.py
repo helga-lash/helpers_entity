@@ -6,6 +6,7 @@ from helpers.configuration.yaml_conf_file import read_yaml_conf
 from helpers.configuration import logger
 from helpers.work_classes.configuration.postgresql import PgConf
 from helpers.work_classes import ReturnEntity
+from helpers.configuration.help_functions import positive_int_check
 
 
 def pg_conf(path: Path = None) -> ReturnEntity:
@@ -81,38 +82,21 @@ def pg_conf(path: Path = None) -> ReturnEntity:
         result.error = True
         result.error_text_append('The port for connecting to the database for writing and reading is not configured')
     else:
-        if type(pg_dict['rw'].get('port')) is float:
+        if positive_int_check(pg_dict['rw'].get('port')):
+            logger.debug('The database connection port for writing and reading is positive integer and not zero')
+            pg_dict['rw'].update(port=int(pg_dict['rw'].get('port')))
+        else:
+            logger.debug('The database connection port for writing and reading is negative or zero')
             result.error = True
             result.error_text_append('Port must be a positive integer')
+    if pg_dict['rw'].get('maxConn') is not None:
+        if positive_int_check(pg_dict['rw'].get('maxConn')):
+            logger.debug('The maximum number of open connections for writing and reading'
+                         ' is positive integer and not zero')
+            pg_dict['rw'].update(maxConn=int(pg_dict['rw'].get('maxConn')))
         else:
-            try:
-                port = int(pg_dict['rw'].get('port'))
-                if port <= 100:
-                    result.error = True
-                    result.error_text_append(
-                        'The database connection port for writing and reading cannot be less than 100'
-                    )
-                else:
-                    pg_dict['rw'].update(port=port)
-            except Exception as error:
-                logger.debug(error)
-                result.error = True
-                result.error_text_append('Port must be a positive integer')
-        if type(pg_dict['rw'].get('maxConn')) is float:
             logger.debug('The maximum number of open connections must be a positive integer')
             pg_dict['rw'].pop('maxConn', None)
-        else:
-            try:
-                max_con = int(pg_dict['rw'].get('maxConn'))
-                if max_con <= 0:
-                    logger.debug('The maximum number of open connections must be a positive integer')
-                    pg_dict['rw'].pop('maxConn', None)
-                else:
-                    pg_dict['rw'].update(maxConn=max_con)
-            except Exception as error:
-                logger.debug('The maximum number of open connections must be a positive integer')
-                logger.debug(error)
-                pg_dict['rw'].pop('maxConn', None)
     if pg_dict['rw'].get('user') is None:
         result.error = True
         result.error_text_append('The user for connecting to the database for writing and reading is not configured')
@@ -133,22 +117,12 @@ def pg_conf(path: Path = None) -> ReturnEntity:
             logger.warning('The port for connecting to the database for reading is not configured')
             pg_dict['ro'].update(port=pg_dict['rw']['port'])
         else:
-            if type(pg_dict['ro'].get('port')) is float:
-                logger.debug('Port must be a positive integer')
-                pg_dict['ro'].update(port=pg_dict['rw']['port'])
+            if positive_int_check(pg_dict['ro'].get('port')):
+                logger.debug('The read database connection port is positive integer and not zero')
+                pg_dict['ro'].update(port=int(pg_dict['ro'].get('port')))
             else:
-                try:
-                    port = int(pg_dict['ro'].get('port'))
-                    if port <= 100:
-                        logger.warning(
-                            'The read database connection port cannot be less than 100, the port from the '
-                            'write and read database connection section will be used')
-                        pg_dict['ro'].update(port=pg_dict['rw']['port'])
-                    else:
-                        pg_dict['ro'].update(port=port)
-                except Exception as error:
-                    logger.debug(error)
-                    pg_dict['ro'].update(port=pg_dict['rw'].get('port'))
+                logger.debug('The database connection port for reading is negative or zero')
+                pg_dict['ro'].update(port=pg_dict['rw'].get('port'))
         if pg_dict['ro'].get('user') is None:
             logger.warning('The database connection user for reading is not configured')
             pg_dict['ro'].update(user=pg_dict['rw']['user'])
@@ -159,21 +133,13 @@ def pg_conf(path: Path = None) -> ReturnEntity:
             logger.warning('The maximum connections for connecting to the database for reading is not configured')
             pg_dict['ro'].update(maxConn=pg_dict['rw'].get('maxConn'))
         else:
-            if type(pg_dict['ro'].get('maxConn')) is float:
-                logger.debug('The maximum number of open connections must be a positive integer')
-                pg_dict['ro'].update(maxConn=pg_dict['rw']['maxConn'])
+            if positive_int_check(pg_dict['ro'].get('maxConn')):
+                logger.debug('The maximum number of open connections for reading'
+                             ' is positive integer and not zero')
+                pg_dict['ro'].update(maxConn=int(pg_dict['ro'].get('maxConn')))
             else:
-                try:
-                    max_con = int(pg_dict['ro'].get('maxConn'))
-                    if max_con <= 0:
-                        logger.debug('The maximum number of open connections must be a positive integer')
-                        pg_dict['ro'].update(maxConn=pg_dict['rw']['maxConn'])
-                    else:
-                        pg_dict['ro'].update(maxConn=max_con)
-                except Exception as error:
-                    logger.debug('The maximum number of open connections must be a positive integer')
-                    logger.debug(error)
-                    pg_dict['ro'].update(maxConn=pg_dict['rw'].get('maxConn'))
+                logger.debug('The maximum number of open connections must be a positive integer')
+                pg_dict['ro'].pop('maxConn', None)
         result.entity = PgConf.from_dict(pg_dict)
     else:
         logger.debug(result.errorText)
