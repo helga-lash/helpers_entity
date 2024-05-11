@@ -17,11 +17,14 @@ class Connect:
             user to connect to the database
         password: str
             password for connecting to the database
+        maxConn: int
+            maximum number of open connections. Default 5
     """
     host: str
     port: int
     user: str
     password: str
+    maxConn: int = 5
 
 
 @dataclass_json

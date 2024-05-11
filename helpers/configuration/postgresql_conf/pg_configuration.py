@@ -52,6 +52,9 @@ def pg_conf(path: Path = None) -> ReturnEntity:
             case 'DB_RW_PAS':
                 logger.debug("The database password for writing data is set from an environment variable")
                 pg_dict['rw'].update(password=str(value))
+            case 'DB_RW_CON':
+                logger.debug("The database maximum connection for writing data is set from an environment variable")
+                pg_dict['rw'].update(maxConn=value)
             case 'DB_RO_HOST':
                 logger.debug("The database host for reading data is set from an environment variable")
                 pg_dict['ro'].update(host=str(value))
@@ -64,6 +67,9 @@ def pg_conf(path: Path = None) -> ReturnEntity:
             case 'DB_RO_PAS':
                 logger.debug("The database password for reading data is set from an environment variable")
                 pg_dict['ro'].update(password=str(value))
+            case 'DB_RO_CON':
+                logger.debug("The database maximum connection for reading data is set from an environment variable")
+                pg_dict['ro'].update(maxConn=value)
 
     if pg_dict.get('name') is None:
         result.error = True
@@ -92,6 +98,21 @@ def pg_conf(path: Path = None) -> ReturnEntity:
                 logger.debug(error)
                 result.error = True
                 result.error_text_append('Port must be a positive integer')
+        if type(pg_dict['rw'].get('maxConn')) is float:
+            logger.debug('The maximum number of open connections must be a positive integer')
+            pg_dict['rw'].pop('maxConn', None)
+        else:
+            try:
+                max_con = int(pg_dict['rw'].get('maxConn'))
+                if max_con <= 0:
+                    logger.debug('The maximum number of open connections must be a positive integer')
+                    pg_dict['rw'].pop('maxConn', None)
+                else:
+                    pg_dict['rw'].update(maxConn=max_con)
+            except Exception as error:
+                logger.debug('The maximum number of open connections must be a positive integer')
+                logger.debug(error)
+                pg_dict['rw'].pop('maxConn', None)
     if pg_dict['rw'].get('user') is None:
         result.error = True
         result.error_text_append('The user for connecting to the database for writing and reading is not configured')
@@ -134,6 +155,25 @@ def pg_conf(path: Path = None) -> ReturnEntity:
         if pg_dict['ro'].get('password') is None:
             logger.warning('The password for connecting to the database for reading is not configured')
             pg_dict['ro'].update(password=pg_dict['rw']['password'])
+        if pg_dict['ro'].get('maxConn') is None:
+            logger.warning('The maximum connections for connecting to the database for reading is not configured')
+            pg_dict['ro'].update(maxConn=pg_dict['rw'].get('maxConn'))
+        else:
+            if type(pg_dict['ro'].get('maxConn')) is float:
+                logger.debug('The maximum number of open connections must be a positive integer')
+                pg_dict['ro'].update(maxConn=pg_dict['rw']['maxConn'])
+            else:
+                try:
+                    max_con = int(pg_dict['ro'].get('maxConn'))
+                    if max_con <= 0:
+                        logger.debug('The maximum number of open connections must be a positive integer')
+                        pg_dict['ro'].update(maxConn=pg_dict['rw']['maxConn'])
+                    else:
+                        pg_dict['ro'].update(maxConn=max_con)
+                except Exception as error:
+                    logger.debug('The maximum number of open connections must be a positive integer')
+                    logger.debug(error)
+                    pg_dict['ro'].update(maxConn=pg_dict['rw'].get('maxConn'))
         result.entity = PgConf.from_dict(pg_dict)
     else:
         logger.debug(result.errorText)
