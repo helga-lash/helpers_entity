@@ -2,6 +2,7 @@ import os
 import json
 
 from unittest import IsolatedAsyncioTestCase
+from datetime import time
 
 from helpers.configuration.app_conf.tg_bot_conf import tg_bot_conf
 from helpers.work_classes import ReturnEntity
@@ -16,11 +17,13 @@ class TgBotConfTests(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.tg_conf_dict = dict(
             token='6870929386:AAGccloydrBobPuFvzjrMWYKkLpMRSzxy3K',
+            recordTime=['11:30:00', '15', '18:12'],
             admins=['test-admin-1', 'test-admin-2', 'test-admin-3', 'test-admin-4', 'test-admin-5']
         )
 
     async def asyncTearDown(self):
         os.environ.pop('TG_TOKEN', None)
+        os.environ.pop('TG_RD_TM', None)
         os.environ.pop('TG_ADMINS', None)
 
     async def test_read_from_dict(self):
@@ -32,6 +35,10 @@ class TgBotConfTests(IsolatedAsyncioTestCase):
         result_entity: TgBotConf = result.entity
         print(json.dumps(result_entity.to_dict(), indent=4, sort_keys=True))
         self.assertEqual('6870929386:AAGccloydrBobPuFvzjrMWYKkLpMRSzxy3K', result_entity.token)
+        self.assertEqual(list, type(result_entity.recordTime))
+        self.assertIn(time(11, 30), result_entity.recordTime)
+        self.assertIn(time(15), result_entity.recordTime)
+        self.assertIn(time(18, 12), result_entity.recordTime)
         self.assertEqual(list, type(result_entity.admins))
         self.assertIn('test-admin-1', result_entity.admins)
         self.assertIn('test-admin-2', result_entity.admins)
@@ -49,6 +56,7 @@ class TgBotConfTests(IsolatedAsyncioTestCase):
 
     async def test_env_var(self):
         os.environ['TG_TOKEN'] = '7981030497:AAGccloydrBobPuFvzjrMWYKkLpMRSzxy3K'
+        os.environ['TG_RD_TM'] = '8, 12:52, 15:21:35'
         os.environ['TG_ADMINS'] = 'test-admin-6, test-admin-7, test-admin-8'
         result: ReturnEntity = tg_bot_conf(self.tg_conf_dict)
         if result.error:
@@ -58,6 +66,10 @@ class TgBotConfTests(IsolatedAsyncioTestCase):
         result_entity: TgBotConf = result.entity
         print(json.dumps(result_entity.to_dict(), indent=4, sort_keys=True))
         self.assertEqual('7981030497:AAGccloydrBobPuFvzjrMWYKkLpMRSzxy3K', result_entity.token)
+        self.assertEqual(list, type(result_entity.recordTime))
+        self.assertIn(time(8), result_entity.recordTime)
+        self.assertIn(time(12, 52), result_entity.recordTime)
+        self.assertIn(time(15, 21, 35), result_entity.recordTime)
         self.assertEqual(list, type(result_entity.admins))
         self.assertIn('test-admin-6', result_entity.admins)
         self.assertIn('test-admin-7', result_entity.admins)
@@ -65,6 +77,7 @@ class TgBotConfTests(IsolatedAsyncioTestCase):
 
     async def test_not_admins(self):
         os.environ['TG_TOKEN'] = '7981030497:AAGccloydrBobPuFvzjrMWYKkLpMRSzxy3K'
+        os.environ['TG_RD_TM'] = '8, 12:52, 15:21:35'
         result: ReturnEntity = tg_bot_conf()
         if result.error:
             for error in result.errorText.split('|'):
@@ -73,9 +86,14 @@ class TgBotConfTests(IsolatedAsyncioTestCase):
         result_entity: TgBotConf = result.entity
         print(json.dumps(result_entity.to_dict(), indent=4, sort_keys=True))
         self.assertEqual('7981030497:AAGccloydrBobPuFvzjrMWYKkLpMRSzxy3K', result_entity.token)
+        self.assertEqual(list, type(result_entity.recordTime))
+        self.assertIn(time(8), result_entity.recordTime)
+        self.assertIn(time(12, 52), result_entity.recordTime)
+        self.assertIn(time(15, 21, 35), result_entity.recordTime)
         self.assertEqual(None, result_entity.admins)
 
     async def test_not_token(self):
+        os.environ['TG_RD_TM'] = '8, 12:52, 15:21:35'
         os.environ['TG_ADMINS'] = 'test-admin-6, test-admin-7, test-admin-8'
         result: ReturnEntity = tg_bot_conf()
         if result.error:
@@ -83,3 +101,13 @@ class TgBotConfTests(IsolatedAsyncioTestCase):
                 print(error)
         self.assertTrue(result.error)
         self.assertIn('Telegram bot token not configured', result.errorText)
+
+    async def test_not_recordTime(self):
+        os.environ['TG_TOKEN'] = '7981030497:AAGccloydrBobPuFvzjrMWYKkLpMRSzxy3K'
+        os.environ['TG_ADMINS'] = 'test-admin-6, test-admin-7, test-admin-8'
+        result: ReturnEntity = tg_bot_conf()
+        if result.error:
+            for error in result.errorText.split('|'):
+                print(error)
+        self.assertTrue(result.error)
+        self.assertIn('The telegram recording time list not configured', result.errorText)

@@ -1,5 +1,7 @@
 import os
 
+from datetime import time
+
 from helpers.configuration import logger
 from helpers.work_classes.configuration import TgBotConf
 from helpers.work_classes import ReturnEntity
@@ -24,6 +26,11 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
             case 'TG_TOKEN':
                 logger.debug("The telegram bot token is set from the environment variable")
                 conf_dict.update(token=str(value))
+            case 'TG_RD_TM':
+                logger.debug("The telegram recording time list is set from the environment variable")
+                conf_dict['recordTime'] = list()
+                for tm in str(os.environ.get('TG_RD_TM')).split(', '):
+                    conf_dict['recordTime'].append(tm)
             case 'TG_ADMINS':
                 logger.debug("The telegram admins is set from the environment variable")
                 conf_dict['admins'] = list()
@@ -33,6 +40,20 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
     if conf_dict.get('token') is None:
         result.error = True
         result.error_text_append('Telegram bot token not configured')
+
+    if conf_dict.get('recordTime') is None:
+        result.error = True
+        result.error_text_append('The telegram recording time list not configured')
+    else:
+        str_list = conf_dict.pop('recordTime')
+        conf_dict['recordTime'] = list()
+        for item in str_list:
+            try:
+                conf_dict['recordTime'].append(time(*list(map(int, item.split(':')))))
+            except Exception as error:
+                logger.debug(error)
+                result.error = True
+                result.error_text_append(f'Invalid time format ({item}).')
 
     if not result.error:
         result.entity = TgBotConf.from_dict(conf_dict)
