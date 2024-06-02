@@ -7,18 +7,16 @@ from typing import Optional, Any
 @dataclass(slots=True)
 class ReturnEntity:
     """
-    Class describing return entity
+    Class describing return entity.
 
     Attributes:
-        error: bool
-            did the action end in error
-        errorText: str
-            (Optional) error text. Default None
-        entity: Any
-            (Optional) return entity. Default None
+        error (bool): Indicates if the action ended in error.
+        errorText (Optional[str]): Error text. Default is None.
+        entity (Optional[Any]): Return entity. Default is None.
 
     Methods:
-        error_text_append
+        error_text_append(self, text: str) -> None:
+            Adds text to the error text.
     """
     error: bool
     errorText: Optional[str] = None
@@ -26,11 +24,13 @@ class ReturnEntity:
 
     def error_text_append(self, text: str) -> None:
         """
-        Method that adds text to the error text
-        Args:
-            text: str, added text
+        Adds text to the error text.
 
-        Returns: None
+        Args:
+            text (str): Added text.
+
+        Returns:
+            None
         """
         if self.errorText is None:
             self.errorText = text

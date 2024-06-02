@@ -9,10 +9,10 @@ from helpers.work_classes.configuration.app.telegram_bot import TgBotConf
 @dataclass(slots=True)
 class AppConf:
     """
-    Class describing application settings
+    Class describing application settings.
 
     Attributes:
-        tgBot: helpers.work_classes.configuration.app.telegram_bot.TgBotConf
-            (Optional) Telegram bot configuration
+        tgBot: Optional[TgBotConf]
+            Telegram bot configuration.
     """
     tgBot: Optional[TgBotConf] = None

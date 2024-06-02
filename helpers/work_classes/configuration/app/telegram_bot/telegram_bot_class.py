@@ -8,17 +8,17 @@ from datetime import time
 @dataclass(slots=True)
 class TgBotConf:
     """
-    Class describing connection to telegram bot settings
+    Class describing connection to telegram bot settings.
 
     Attributes:
-        token: str
-            Token for telegram bot
-        recordTime: list[datetime.time]
-            Recording time list
-        admins: list[str]
-            (Optional) List of bot admin IDs
-        recordMonth: int
-            (Optional) Number of months available for recording. Default 2
+        token : str
+            Token for telegram bot.
+        recordTime : list[datetime.time], optional
+            Recording time list. Default is empty list.
+        admins : list[str], optional
+            List of bot admin IDs. Default is None.
+        recordMonth : int, optional
+            Number of months available for recording. Default is 2.
     """
     token: str
     recordTime: list[time] = field(metadata=config(encoder=lambda x: [str(i) for i in x]))

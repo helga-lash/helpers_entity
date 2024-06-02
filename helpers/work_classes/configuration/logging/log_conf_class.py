@@ -10,7 +10,7 @@ from helpers.work_classes.configuration.logging.enum_classes import LogLevel, Lo
 @dataclass(slots=True)
 class LogConf:
     """
-    Class describing logging settings
+    Class describing logging settings.
 
     Attributes:
         level: LogLevel
@@ -19,8 +19,8 @@ class LogConf:
             Logging recording format. Can take values: json, string. Default: string
         output: LogOutput
             Logging output. Can take values: stream, file. Default: stream
-        path: Path
-            (Optional) Logging file path. Used when the output accepts the value file. Default: "/log/app.log"
+        path: Optional[Path]
+            Logging file path. Used when the output accepts the value file. Default: "/log/app.log"
     """
     level: LogLevel = field(default=LogLevel.info, metadata=config(encoder=lambda x: x.value,
                                                                    decoder=lambda x: LogLevel[x]))

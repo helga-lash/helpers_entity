@@ -11,9 +11,17 @@ from helpers.configuration.help_functions import positive_int_check
 
 def pg_conf(path: Path = None) -> ReturnEntity:
     """
-    Method validating the connection configuration to the PostgreSQL database
-    :param path: path to configuration file
-    :return: helpers.work_classes.ReturnEntity
+    Method validating the connection configuration to the PostgreSQL database.
+
+    Parameters:
+        path (Path, optional): Path to the configuration file.
+         If not provided, the function will attempt to read the configuration from the default location.
+
+    Returns:
+        ReturnEntity: An object containing the result of the operation.
+         If the operation is successful, the 'entity' attribute will contain a PgConf object with the validated database
+         configuration. If an error occurs, the 'error' attribute will be set to True, and the 'errorText' attribute will
+         contain a description of the error.
     """
     result: ReturnEntity = ReturnEntity(False)
 

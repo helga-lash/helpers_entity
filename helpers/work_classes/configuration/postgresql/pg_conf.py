@@ -6,19 +6,19 @@ from dataclasses_json import dataclass_json
 @dataclass(slots=True)
 class Connect:
     """
-    Class describing connection to postgresql database settings
+    Class describing connection to PostgreSQL database settings.
 
     Attributes:
-        host: str
-            IP address or DNS database host name
-        port: int
-            port on which the database
-        user: str
-            user to connect to the database
-        password: str
-            password for connecting to the database
-        maxConn: int
-            maximum number of open connections. Default 5
+        host : str
+            IP address or DNS database host name.
+        port : int
+            Port on which the database is running.
+        user : str
+            User to connect to the database.
+        password : str
+            Password for connecting to the database.
+        maxConn : int, optional
+            Maximum number of open connections. Default is 5.
     """
     host: str
     port: int
@@ -31,15 +31,15 @@ class Connect:
 @dataclass(slots=True)
 class PgConf:
     """
-    Class describing postgresql database settings
+    Class describing PostgreSQL database settings.
 
     Attributes:
-        name: str
-            database name
-        rw: Connect
-            description of connecting to the database to record data
-        ro: Connect
-            description of connecting to the database for reading data
+        name : str
+            The name of the database.
+        rw : Connect
+            Description of the connection to the database for writing data.
+        ro : Connect
+            Description of the connection to the database for reading data.
     """
     name: str
     rw: Connect

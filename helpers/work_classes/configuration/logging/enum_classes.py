@@ -3,19 +3,19 @@ from enum import Enum
 
 class LogLevel(Enum):
     """
-    Enum class describing logging level
+    Enum class describing logging level.
 
     Attributes:
         debug: int
-            debug logging level (10)
+            Represents debug logging level (10).
         info: int
-            info logging level (20)
+            Represents info logging level (20).
         warning: int
-            warning logging level (30)
+            Represents warning logging level (30).
         error: int
-            error logging level (40)
+            Represents error logging level (40).
         critical: int
-            critical logging level (50)
+            Represents critical logging level (50).
     """
     debug: int = 10
     info: int = 20
@@ -26,13 +26,13 @@ class LogLevel(Enum):
 
 class LogFormat(Enum):
     """
-    Enum class describing logging recording format
+    Enum class describing logging recording format.
 
     Attributes:
         json: str
-            json logging recording format
+            Represents the JSON logging recording format.
         string: str
-            string logging recording format
+            Represents the string logging recording format.
     """
     json: str = 'json'
     string: str = 'string'
@@ -40,13 +40,13 @@ class LogFormat(Enum):
 
 class LogOutput(Enum):
     """
-    Enum class describing logging output method
+    Enum class describing logging output method.
 
     Attributes:
         file: str
-            file logging output method
+            Represents the file logging output method.
         stream: str
-            stream logging output method
+            Represents the stream logging output method.
     """
     file: str = 'file'
     stream: str = 'stream'
