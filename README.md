@@ -10,10 +10,11 @@ Helper entities for other applications
 * PgConf - класс описывающий конфигурацию подключения к БД PostgreSQL
 * TgBotConf - класс описывающий конфигурацию подключения к телеграм боту
 * AppConf - класс описывающий конфигурацию приложения
+* MinioClientConf - класс описывающий конфигурацию клиентского подключения к s3-minio
 * ReturnEntity - класс описывающий сущность возвращаемую функциями
 ### helpers.configuration:
 * log_conf - функция возвращающая класс helpers.work_classes.LogConf
-* logger - сконфигурированный логер 
+* logger - сконфигурированный логгер
 * pg_conf - функция возвращающая класс helpers.work_classes.PgConf
 * app_conf - функция возвращающая класс helpers.work_classes.AppConf
 

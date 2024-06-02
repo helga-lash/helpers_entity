@@ -2,6 +2,7 @@ from helpers.work_classes.configuration.logging import LogLevel, LogFormat, LogO
 from helpers.work_classes.configuration.postgresql import PgConf
 from helpers.work_classes.configuration.app import AppConf
 from helpers.work_classes.configuration.app.telegram_bot import TgBotConf
+from helpers.work_classes.configuration.minio import MinioClientConf
 
 
 __all__ = (
@@ -11,5 +12,6 @@ __all__ = (
     'LogOutput',
     'PgConf',
     'TgBotConf',
-    'AppConf'
+    'AppConf',
+    'MinioClientConf'
 )

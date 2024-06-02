@@ -4,6 +4,7 @@ import os
 from HTMLTestRunner import HTMLTestRunner
 
 from unit_tests.configuration import configurationSuite
+from unit_tests.work_classes import workClassesSuite
 
 
 output_dir = os.environ.get('REPORT_OUT_DIR', '/reports')
@@ -12,6 +13,7 @@ version = os.environ.get('HPE_VERS', 'v0.0.1')
 
 testsSuite = unittest.TestSuite()
 testsSuite.addTest(configurationSuite)
+testsSuite.addTest(workClassesSuite)
 
 test_runner = HTMLTestRunner(log=True,
                              verbosity=2,
