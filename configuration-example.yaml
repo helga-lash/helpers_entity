@@ -20,6 +20,14 @@ database:
     password: testPasswordRo  # DB_RO_PAS - string, password for connecting to the database for reading data
     maxConn: 5                # DB_RO_CON - (Optional) int, maximum number of open connections to the database for reading data
 
+minio:
+  host: 127.0.0.1             # MN_HOST - string, IP address or DNS minio host name
+  port: 9000                  # MN_PORT - (Optional) int, port on which the minio server is listening. Default is 80 or 443
+  secure: false               # MN_SECURE - (Optional) boolean, if true https is used, otherwise http. Default is false
+  region: us-east-1           # MN_REGION - (Optional) string, configured in minio region. Default is "us-east-1"
+  accessKey: minioAccessKey   # MN_ACCESS_KEY - string, access key for connecting the client to the minio
+  secretKey: minioSecretKey   # MN_SECRET_KEY - string, secret key for connecting the client to the minio
+
 app:
   tgBot:
     token: 6870999386:AAGccloydrBobPuFvzjrMWYKkLpMRSzxy3K   # TG_TOKEN - string, token for telegram bot

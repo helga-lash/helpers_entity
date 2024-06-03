@@ -20,8 +20,8 @@ def pg_conf(path: Path = None) -> ReturnEntity:
     Returns:
         ReturnEntity: An object containing the result of the operation.
          If the operation is successful, the 'entity' attribute will contain a PgConf object with the validated database
-         configuration. If an error occurs, the 'error' attribute will be set to True, and the 'errorText' attribute will
-         contain a description of the error.
+         configuration. If an error occurs, the 'error' attribute will be set to True, and the 'errorText' attribute
+         will contain a description of the error.
     """
     result: ReturnEntity = ReturnEntity(False)
 
