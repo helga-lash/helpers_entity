@@ -1,4 +1,5 @@
-from helpers.work_classes.configuration import LogLevel, LogFormat, LogOutput, LogConf, PgConf, TgBotConf, AppConf
+from helpers.work_classes.configuration import (LogLevel, LogFormat, LogOutput, LogConf, PgConf, TgBotConf, AppConf,
+                                                MinioClientConf)
 from helpers.work_classes.returt_entity import ReturnEntity
 
 
@@ -10,5 +11,6 @@ __all__ = (
     'PgConf',
     'ReturnEntity',
     'TgBotConf',
-    'AppConf'
+    'AppConf',
+    'MinioClientConf'
 )
