@@ -17,6 +17,7 @@ Helper entities for other applications
 * logger - сконфигурированный логгер
 * pg_conf - функция возвращающая класс helpers.work_classes.PgConf
 * app_conf - функция возвращающая класс helpers.work_classes.AppConf
+* minio_conf - функция возвращающая класс helpers.work_classes.MinioClientConf
 
 ## Unit tests:
 * Для запуска выполнить команду из директории с проектом:
