@@ -1,10 +1,10 @@
 import unittest
 
-from unit_tests.work_classes.minio import minioConfSuite
+from unit_tests.work_classes.configuration import workClassesConfigurationSuite
 
 
 workClassesSuite = unittest.TestSuite()
-workClassesSuite.addTest(minioConfSuite)
+workClassesSuite.addTest(workClassesConfigurationSuite)
 
 
 __all__ = 'workClassesSuite'

@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json, config
 from typing import Optional
 from datetime import time
+from pathlib import Path
 
 
 @dataclass_json
@@ -19,8 +20,11 @@ class TgBotConf:
             List of bot admin IDs. Default is None.
         recordMonth : int, optional
             Number of months available for recording. Default is 2.
+        photoPath: Path, optional
+            Path to the photo directory. Default is /tmp.
     """
     token: str
     recordTime: list[time] = field(metadata=config(encoder=lambda x: [str(i) for i in x]))
     admins: Optional[list[str]] = None
     recordMonth: int = 2
+    photoPath: Path = field(metadata=config(encoder=str), default=Path('/tmp'))

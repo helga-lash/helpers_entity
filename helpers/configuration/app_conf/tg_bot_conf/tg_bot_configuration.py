@@ -1,6 +1,7 @@
 import os
 
 from datetime import time
+from pathlib import Path
 
 from helpers.configuration import logger
 from helpers.work_classes.configuration import TgBotConf
@@ -40,6 +41,9 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
             case 'TG_RD_MT':
                 logger.debug("The telegram number of months is set from the environment variable")
                 conf_dict.update(recordMonth=str(value))
+            case 'TG_PHOTO_PATH':
+                logger.debug("The telegram photo path is set from the environment variable")
+                conf_dict.update(photoPath=str(value))
 
     if conf_dict.get('token') is None:
         result.error = True
@@ -66,6 +70,9 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
         else:
             logger.debug('The telegram number of months must be a positive integer. The default value will be used')
             conf_dict.pop('recordMonth')
+
+    if type(conf_dict.get('photoPath')) is str:
+        conf_dict['photoPath'] = Path(conf_dict['photoPath'])
 
     if not result.error:
         result.entity = TgBotConf.from_dict(conf_dict)

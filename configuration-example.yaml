@@ -39,3 +39,4 @@ app:
       - '15:00'
       - '18:00:00'
     recordMonth: 2                                          # TG_RD_MT - int, number of months available for recording
+    photoPath: '/tmp/photo'                                 # TG_PHOTO_PATH - string, path to save photos. Default is "/tmp"
