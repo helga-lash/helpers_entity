@@ -7,6 +7,24 @@ from pathlib import Path
 
 @dataclass_json
 @dataclass(slots=True)
+class Contacts:
+    """
+    Class describing contact information.
+
+    Attributes:
+        phone : str, optional
+        whatsapp : str, optional
+        instagram : str, optional
+        vk : str, optional
+    """
+    phone: Optional[str] = None
+    whatsapp: Optional[str] = None
+    instagram: Optional[str] = None
+    vk: Optional[str] = None
+
+
+@dataclass_json
+@dataclass(slots=True)
 class TgBotConf:
     """
     Class describing connection to telegram bot settings.
@@ -28,3 +46,4 @@ class TgBotConf:
     admins: Optional[list[str]] = None
     recordMonth: int = 2
     photoPath: Path = field(metadata=config(encoder=str), default=Path('/tmp'))
+    contacts: Contacts = field(default_factory=Contacts)

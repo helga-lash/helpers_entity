@@ -23,6 +23,10 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
         logger.debug("Telegram bot configuration not set in config file")
         conf_dict: dict = dict()
 
+    if conf_dict.get('contacts') is None:
+        logger.debug("Telegram bot contacts not set in config file")
+        conf_dict.update(contacts={})
+
     for key, value in os.environ.items():
         match key:
             case 'TG_TOKEN':
@@ -44,6 +48,18 @@ def tg_bot_conf(conf_dict: dict = None) -> ReturnEntity:
             case 'TG_PHOTO_PATH':
                 logger.debug("The telegram photo path is set from the environment variable")
                 conf_dict.update(photoPath=str(value))
+            case 'TG_CON_PHONE':
+                logger.debug("The telegram contacts phone is set from the environment variable")
+                conf_dict['contacts'].update(phone=str(value))
+            case 'TG_CON_WHATSAPP':
+                logger.debug("The telegram contacts whatsapp is set from the environment variable")
+                conf_dict['contacts'].update(whatsapp=str(value))
+            case 'TG_CON_INSTAGRAM':
+                logger.debug("The telegram contacts instagram is set from the environment variable")
+                conf_dict['contacts'].update(instagram=str(value))
+            case 'TG_CON_VK':
+                logger.debug("The telegram contacts vk is set from the environment variable")
+                conf_dict['contacts'].update(vk=str(value))
 
     if conf_dict.get('token') is None:
         result.error = True

@@ -40,3 +40,8 @@ app:
       - '18:00:00'
     recordMonth: 2                                          # TG_RD_MT - int, number of months available for recording
     photoPath: '/tmp/photo'                                 # TG_PHOTO_PATH - string, path to save photos. Default is "/tmp"
+    contacts:
+      phone: +78005553535                                   # TG_CON_PHONE - string, phone number
+      whatsapp: https://wa.me/78005553535                   # TG_CON_WHATSAPP - string, link to whatsapp
+      instagram: https://www.instagram.com/example          # TG_CON_INSTAGRAM - string, link to instagram
+      vk: https://vk.com/example                            # TG_CON_VK - string, link to vk
