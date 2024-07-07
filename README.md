@@ -28,7 +28,7 @@ Helper entities for other applications
   ```shell
   docker compose -f docker-compose.yaml -f composes/unit-tests.yaml down --rmi local -v; sudo rm -f tests/reports/unit-tests.log
   ```
-[Отчет](./tests/reports/unit-tests.html)
+[Отчет](tests/reports/unit-tests.html)
 
 ## Очистка системы после запуска тестов
 Т.к. тесты и окружение разработчика построены на сборке контейнеров через compose, docker сохраняет кеш собранных

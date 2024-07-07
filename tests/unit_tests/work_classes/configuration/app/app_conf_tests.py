@@ -31,7 +31,7 @@ class TestAppConf(IsolatedAsyncioTestCase):
         tg_bot_conf = TgBotConf(token="test_token", recordTime=[time(11, 15), time(18, 5)])
         self.assertDictEqual(app_conf.tgBot.to_dict(), tg_bot_conf.to_dict())
 
-    async def test_asdict(self):
+    async def test_as_dict(self):
         tg_bot_conf = TgBotConf(token="test_token", recordTime=[time(11, 15), time(18, 5)])
         app_conf = AppConf(tgBot=tg_bot_conf)
         expected_dict = {'tgBot': {'admins': None,
