@@ -14,5 +14,10 @@ class AppConf:
     Attributes:
         tgBot: Optional[TgBotConf]
             Telegram bot configuration.
+            Default: None
+        run: Optional[bool]
+            Indicates if the application should run.
+            Default: None
     """
     tgBot: Optional[TgBotConf] = None
+    run: Optional[bool] = None
